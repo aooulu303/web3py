@@ -1,0 +1,36 @@
+要查询 Arbitrum（ARB）区块高度，您可以使用以下 Java 代码片段来发送 HTTP 请求并获取 Arbitrum 区块链的信息，包括当前的区块高度。以下代码示例将通过 Arbitrum 区块浏览器 API 来获取相关信息：
+
+```java
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class ArbBlockHeight {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://arbiscan.io/api?module=block&action=getblockcount");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Parse the JSON response to get the block height
+            String jsonResponse = response.toString();
+            int blockHeight = Integer.parseInt(jsonResponse.split("\"result\":")[1].split("}")[0]);
+            System.out.println("Current Arbitrum block height: " + blockHeight);
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+    }
+}
+```
+
+这段代码发送了一个 HTTP GET 请求来获取 Arbitrum 区块链的最新区块信息，并提取出当前的区块高度进行输出。确保按照您的需求进行适当的调整，并添加错误处理逻辑以确保代码的完整性和准确性。
